@@ -1,7 +1,7 @@
 import re
 
 def format_input():
-    with open('input2.txt', 'r') as f:
+    with open('input.txt', 'r') as f:
         lines = f.readlines()
     
     overall_list = []
@@ -17,15 +17,62 @@ def format_input():
 
 
 def is_valid(passport):
-    byr_range = range(1920, 2003)
-    iyr_range = range(2010, 2021)
-    eyr_range = range(2020, 2030)
-    hgt_cm_range = range(150, 194)
-    hgt_in_range = range(59, 77)
-    hcl = re.compile('#[0-9][a-f][0-9][a-f][0-9][a-f][0-9][a-f][0-9][a-f][0-9][a-f]')
-    ecl_range = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']
-    #pid = re.match("0000[0-9]+")
-    return passport
+    tests = {'byr': range(1920, 2003), 
+            'iyr': range(2010, 2021), 
+            'eyr': range(2020, 2031), 
+            'hgt': [range(150, 194), range(59, 77)], 
+            'hcl': "^#[0-9a-f]{6}$",
+            'ecl': ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'], 
+            'pid': "^[0-9]{9}$"}
+    true_params = 1
+        
+    for i in passport:
+        if i in ['byr', 'iyr','eyr']:
+            if passport[i] in tests[i]:
+                true_params += 1
+        elif i == 'hcl':
+            if bool(re.fullmatch(tests['hcl'], passport[i])):
+                true_params += 1
+        elif i in tests['ecl']:
+            true_params += 1
+        elif i == 'pid':
+            if bool(re.fullmatch(tests['pid'], passport[i])):
+                true_params += 1
+        elif i == 'hgt':
+            if passport[i][1] == 'in':
+                if passport[i][0] in tests[i][1]:
+                    true_params += 1
+            elif passport[i][1] == 'cm':
+                if passport[i][0] in tests[i][0]:
+                    true_params += 1
+
+    #for i in passport:
+     #   print(i, passport[i], true_params)
+
+    if true_params == len(passport):
+        return True
+    else:
+        return False
+     
+
+
+def change_types(passports):
+    for passport in passports:
+        for i in passport:
+            if i in ['byr', 'iyr','eyr']:
+                passport.update({i:int(passport[i])})
+            if i == 'hgt':
+                new = {}
+                value_units = []
+                try:
+                    value_units.append(int(passport[i][:-2]))
+                except ValueError:
+                    value_units.append(None)
+                value_units.append(passport[i][-2:])
+                new = {'hgt': value_units}
+                passport.update(new)
+    
+    return passports
 
 
 def func(lst):
@@ -40,18 +87,16 @@ def func(lst):
         all_people.append(person_dict)
     
     valid = 0
-    for people in all_people:
-        print(is_valid(people))
 
-    #valid = 0
-    #for people in all_people:
-    #    if len(people) == 8:
-    #        valid += 1
-    #    elif len(people) == 7 and 'cid' not in people.keys():
-    #            valid += 1
-    #return valid
+    final_passports = change_types(all_people)
+    
+    for i in final_passports:
+        if is_valid(i):
+            valid += 1
+
+    return valid
 
 
 lst = format_input()
-func(lst)
+print(func(lst))
 
