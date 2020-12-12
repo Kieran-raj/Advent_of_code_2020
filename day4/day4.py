@@ -21,11 +21,11 @@ def is_valid(passport):
             'iyr': range(2010, 2021), 
             'eyr': range(2020, 2031), 
             'hgt': [range(150, 194), range(59, 77)], 
-            'hcl': "^#[0-9a-f]{6}$",
+            'hcl': "^\#[0-9a-f]{6}$",
             'ecl': ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'], 
-            'pid': "^[0-9]{9}$"}
+            'pid': "^\d{9}$"}
     true_params = 1
-        
+    test = []   
     for i in passport:
         if i in ['byr', 'iyr','eyr']:
             if passport[i] in tests[i]:
@@ -45,15 +45,19 @@ def is_valid(passport):
             elif passport[i][1] == 'cm':
                 if passport[i][0] in tests[i][0]:
                     true_params += 1
-
-    #for i in passport:
-     #   print(i, passport[i], true_params)
-
+        elif i == 'cid':
+            true_params += 1
+        #print(f'lenth: {len(passport)}, true_params: {true_params}')
+        #print(i, passport[i])
     if true_params == len(passport):
+        test.append(passport)
         return True
     else:
         return False
      
+    #for i in test:
+    #    for j in i:
+     #       print(j, i[j])
 
 
 def change_types(passports):
@@ -89,10 +93,17 @@ def func(lst):
     valid = 0
 
     final_passports = change_types(all_people)
-    
-    for i in final_passports:
-        if is_valid(i):
-            valid += 1
+
+    for i in [p for p in final_passports if len(p) > 6]:
+        #print('\n')
+        #print(len(i))
+        if len(i) == 8:
+            if is_valid(i):
+                valid += 1
+        else:
+            if 'cid' not in i.keys():
+                if is_valid(i):
+                    valid += 1
 
     return valid
 
