@@ -11,7 +11,7 @@ def get_input(file):
 
 
 def row_column():
-    passes = get_input('test.txt')
+    passes = get_input('input.txt')
 
     final_values = []
 
@@ -52,7 +52,15 @@ def row_column():
     return final_values
 
 
-print(row_column())
+all_values = row_column()
+answers = []
+for i in all_values:
+    ans = (i[0] * 8) + i[1]
+    answers.append(ans)
+
+
+print(max(answers))
+
 
 
 
