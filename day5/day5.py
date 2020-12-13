@@ -58,12 +58,13 @@ for i in all_values:
     ans = (i[0] * 8) + i[1]
     answers.append(ans)
 
+#print(max(answers))
 
-print(max(answers))
-
-
-
+### part 2
 
 
+for seat in range(min(answers), max(answers)):
+    if seat not in answers:
+        print(seat)
 
 
