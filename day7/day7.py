@@ -8,7 +8,6 @@ def search_function(lst, line):
     for a in lst:
         if line[0][:index] in a[0] and a[0][:10] != line[0][:index]:
             bags.append(line[0][:index])
-            # return 1
     print(set(bags))
 
 
@@ -23,10 +22,5 @@ def get_shiny_list(lines):
 
     for i in lines_with_shiny:
         search_function(list_of_lines, i)
-    # for line in lines_with_shiny:
-    #     count += search_function(list_of_lines, line)
-    
-    # print(count)
-    
 
 get_shiny_list(lines)
