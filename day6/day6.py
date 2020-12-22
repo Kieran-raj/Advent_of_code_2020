@@ -40,6 +40,6 @@ def part_two(lines):
              
 
 
-#print(part_one(lines))
+part_one(lines))
 part_two(lines)
 
